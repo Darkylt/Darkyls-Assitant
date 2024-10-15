@@ -1,0 +1,452 @@
+Server:
+  server_id: 719633317422432366
+
+Owner:
+  owner_id: 671019102583783434
+
+Channels:
+  logs: 1234402356511375401
+  reports: 1234402392808624128
+  admin: 739033247165579274
+  Confessions:
+    channel: 1252707595379146875
+    approving: 1252707187424235614
+  verify: 1233525697499234385
+
+Welcome Card:
+  scale_factor: 0.74
+  channel: 1234402603966660619
+
+Roles:
+  admin: 736977132709871676
+  moderator: 1234497044501233756
+  verified: 1234406660097708052
+  muted: 1250504410346426470
+  Descriptors:
+    gamer: 1234429413639196714
+    musician: 1234429523034902528
+    dj: 1234429580677353535
+    photographer: 1234429656032215041
+    content_creator: 1234429697601835038
+    visual_artist: 1234429735358955622
+  Pronouns:
+    he_him: 1234430001508651018
+    she_her: 1234430039290806272
+    they_them: 1234430115409297408
+    other_ask: 1234430147646586900
+    skibidy_toilet: 1234467117370183730
+  Regions:
+    north_america: 1234430247340871760
+    south_america: 1234430426035126334
+    europe: 1234430456422727711
+    asia: 1234430493370355753
+    africa: 1234430512978726994
+    oceania_australia: 1234430536903299082
+  Pings:
+    youtube: 1234430629274189874
+    twitch: 1234430686153408512
+    announcements: 1234430747478331489
+
+YouTube:
+  channel_id: UC1vqivmEx6wSMN3GGzdMM4A
+  check_frequency: 1200 # How often it should check for a new video (in seconds)
+  discord_channel: 1234496240327069726
+
+Random Tips:
+  enabled: False
+  channel: 1234412833333051442
+
+Level System:
+  update_levels: False
+  update_channel: 1234402356511375401
+  level_xp_mapping:
+    1: 155
+    2: 220
+    3: 295
+    4: 380
+    5: 475
+    6: 580
+    7: 695
+    8: 820
+    9: 955
+    10: 1100
+    11: 1255
+    12: 1420
+    13: 1595
+    14: 1780
+    15: 1975
+    16: 2180
+    17: 2395
+    18: 2620
+    19: 2855
+    20: 3100
+    21: 3355
+    22: 3620
+    23: 3895
+    24: 4180
+    25: 4475
+    26: 4780
+    27: 5095
+    28: 5420
+    29: 5755
+    30: 6100
+    31: 6455
+    32: 6820
+    33: 7195
+    34: 7580
+    35: 7975
+    36: 8380
+    37: 8795
+    38: 9220
+    39: 9655
+    40: 10100
+    41: 10555
+    42: 11020
+    43: 11395
+    44: 11980
+    45: 12475
+    46: 12980
+    47: 13495
+    48: 14020
+    49: 14555
+    50: 15100
+    51: 15655
+    52: 16220
+    53: 16795
+    54: 17380
+    55: 17975
+    56: 18580
+    57: 19195
+    58: 19820
+    59: 20455
+    60: 21100
+    61: 21755
+    62: 22420
+    63: 23095
+    64: 23780
+    65: 24475
+    66: 25180
+    67: 25895
+    68: 26620
+    69: 27355
+    70: 28100
+    71: 28855
+    72: 29620
+    73: 30395
+    74: 31180
+    75: 31975
+    76: 32780
+    77: 33595
+    78: 34420
+    79: 35255
+    80: 36100
+    81: 36955
+    82: 37820
+    83: 38695
+    84: 39580
+    85: 40475
+    86: 41380
+    87: 42295
+    88: 43220
+    89: 44155
+    90: 45100
+    91: 46055
+    92: 47020
+    93: 47995
+    94: 48980
+    95: 49975
+    96: 50980
+    97: 51995
+    98: 53020
+    99: 54055
+    100: 55100
+
+Moderation:
+  #Filtering
+  allowed_files:
+    - "png"
+    - "jpg"
+    - "jpeg"
+    - "gif"
+    - "bmp"
+    - "tiff"
+    - "tif"
+    - "svg"
+    - "webp"
+    - "pdf"
+    - "odt"
+    - "ods"
+    - "odp"
+    - "txt"
+    - "md"
+    - "csv"
+    - "rtf"
+    - "mp3"
+    - "mp2"
+    - "mp1"
+    - "wav"
+    - "ogg"
+    - "flac"
+    - "pcm"
+    - "aif"
+    - "aiff"
+    - "cda"
+    - "wma"
+    - "m4a"
+    - "aac"
+    - "mp4"
+    - "mov"
+    - "avi"
+    - "mkv"
+    - "m4v"
+    - "wmv"
+    - "ttf"
+    - "otf"
+    - "woff"
+    - "ini"
+    - "cfg"
+    - "conf"
+    - "xml"
+    - "yml"
+    - "json"
+    - "epub"
+  filter_nsfw_words: False
+  
+  roast_api_censored_words: # Used for censoring specific words out of the insult API
+    - "Neger"
+    - "Nigger"
+    - "neger"
+    - "nigger"
+  
+  Warnings:
+    kick_threshold: 3 # How many warnings until kick
+    ban_threshold: 5 # How many warnings until ban
+  
+  Raids:
+    member_threshold: 5 # How many members must have joined
+    time_frame: 10 # The time frame in which they have joined
+
+  force_captcha: False # Only use captcha as verification method
+  disable_captcha: False
+
+Help Messages:
+  general: |
+    Hello! I'm Darkyl's Assitant!
+    I'm your digital overlord, here to save the day!
+    From keeping the peace to sprinkling a little fun, I've got it covered!
+    *And yes, despite all the hard work, I'm sadly unpaid* 😔
+
+    You can use the category option of this command to learn more about what I have to offer!
+  
+  all_commands: |
+    **/help:** Get help with the bot.
+    **/report:** Report a user to the mods.
+    **/socials:** Get links to all of Darkyl's profiles.
+    **/stats:** Get statistics on me!
+    **/cat:** Send a cat gif :)
+    **/dog:** Send a dog gif :)
+    **/hug:** Hug someone :)
+    **/kiss:** Kiss someone :)
+    **/slap:** Slap someone 😈
+    **/roast:** Roast someone!
+    **/advice:** Let me give you some useful advice!
+    **/joke:** Let me tell you a joke!
+    **/why:** Askin' the real questions here
+    **/pop:** Occupational therapy
+    **/ship:** Ship somebody with someone else!
+    **quote:** (Message command): Generate a quote card
+    **mock:** (Message command): iTS SpElleD sQl!!
+    **/8ball:** Ask a question to the 8Ball!
+    **/converter_binary:** Convert to or from binary
+    **/converter_base64:** Convert to or from base64
+    **/show_avatar:** Display someones avatar
+    **/wiki:** Search Wikipedia for articles!
+    **/f:** Press F to pay respect.
+    **/rickroll:** You have been rickrolled
+    **/nsfw_opt_out:** Choose not to be included in NSFW contexts by the bot
+    **/rock_paper_scissors:** Play Rock Paper Scissors
+    **/time_in:** Get the time
+    **/truth_or_dare:** Get a truth or dare question.
+    **/would_you_rather:** Get a would you rather question.
+    **/pi_search:** Search for a number in pi.
+    **/pi_fact:** Get a random fact about pi.
+    **/pi_segment:** Get a segment of pi with stats about it.
+    **/suggest:** Suggest something to the admins anonymously.
+    **/confess:** Confess something anonysmously
+    **/qrcode:** Generate a QR Code
+  
+  admin_commands: |
+    **/admin_tst:** A command used for testing the bot.
+    **/admin_stop:** Stop the Bot.
+    **/admin_restart:** Restart the Bot.
+    **/admin_add_tip:** Adds a tip to the daily random tips.
+    **/admin_send_tip:** Triggers sending the daily random tip.
+    **/warn:** Warn a user.
+    **/clear_warnings:** Remove all warnings of someone.
+    **/kick:** Kick a user.
+    **/ban:** Ban a user.
+    **/tempban:** Ban a user temporarily
+    **/slowmode:** Set the slowmode interval for a channel.
+    **/timeout:** Timeout a member.
+    **/purge:** Purge messages from this channel. (Also: /clear, /prune)
+    **/mod_menu:** Your control panel for a user
+    **/mute:** Mute a user.
+    **/unmute:** Unmute a user.
+    **/configure_mute_role:** Give the mute role the proper restrictions.
+    **/add_role:** Give a role to a user.
+    **/remove_role:** Remove a role of a user.
+    **/custom_role:** Give a custom role to someone
+    **/fakeban:** Do some trolling by fake banning someone
+    **/fakekick:** Do some trolling by fake kicking someone
+    **/flood_of_pings:** Ping specified user number of times
+    **/message_history:** Get the previous versions of a message
+
+  fun_commands: |
+    Some commands to have a little fun. Spice up the server or do a little trolling 😈.
+    **/stats:** Get statistics on me!
+    **/cat:** Send a cat gif :)
+    **/dog:** Send a dog gif :)
+    **/hug:** Hug someone :)
+    **/kiss:** Kiss someone :)
+    **/slap:** Slap someone 😈
+    **/roast:** Roast someone!
+    **/advice:** Let me give you some useful advice!
+    **/joke:** Let me tell you a joke!
+    **/why:** Askin' the real questions here
+    **/pop:** Occupational therapy
+    **/ship:** Ship somebody with someone else!
+    **quote:** (Message command): Generate a quote card
+    **mock:** (Message command): iTS SpElleD sQl!!
+    **/f:** Press F to pay respect.
+    **/rickroll:** You have been rickrolled
+    **/8ball:** Ask a question to the 8Ball!
+    **/rock_paper_scissors:** Play Rock Paper Scissors
+    **/truth_or_dare:** Get a truth or dare question.
+    **/would_you_rather:** Get a would you rather question.
+    **/pi_search:** Search for a number in pi.
+    **/pi_fact:** Get a random fact about pi.
+    **/pi_segment:** Get a segment of pi with stats about it.
+
+  utility_commands: |
+    Some useful commands.
+    **/report:** Report a user to the mods.
+    **/converter_binary:** Convert to or from binary
+    **/converter_base64:** Convert to or from base64
+    **/show_avatar:** Display someones avatar
+    **/wiki:** Search Wikipedia for articles!
+    **/nsfw_opt_out:** Choose not to be included in NSFW contexts by the bot
+    **/time_in:** Get the time
+    **/suggest:** Suggest something to the admins anonymously.
+    **/confess:** Confess something anonysmously
+    **/qrcode:** Generate a QR Code
+    **/remind:** Set reminders for yourself
+    **/list_reminders:** Shows your current set reminders
+    **/cancel_reminder:** Cancel a reminder
+  
+  tos: |
+    Terms of Service
+    Below is a non valid summary of the Terms of Service Agreement for this Discord Bot. **Please read the full and valid version [here](https://darkylmusic.com/discord-bot/tos).**
+
+
+    **1. Use of the Bot:** Users are granted a limited, non-transferable license for personal or non-commercial use.
+
+    **2. Prohibited Use:** Users must not violate laws, disrupt bot operations, misuse personal data, or engage in unauthorized commercial activities.
+
+    **3. Limitation of Liability:** The bot owner is not liable for damages resulting from the use or inability to use the bot.
+
+    **4. Modifications:** The bot owner can modify or discontinue the bot without notice and without liability.
+
+    **5. Intellectual Property:** The bot's source code is open-source (GPL-3.0), but generated content remains the owner's property.
+
+    **6. Indemnification:** Users indemnify the bot owner against any claims arising from their use of the bot.
+
+    **7. Termination:** Either party can terminate the agreement at any time; certain clauses survive termination.
+
+    **8. Governing Law:** The agreement is governed by German law, with disputes resolved through arbitration.
+
+    **9. Entire Agreement:** The document constitutes the entire agreement between the bot owner and users.
+
+  privacy: |
+    Privacy Information
+    # 1. Data Collected:
+    We only store the data you provide us. Our database includes:
+    - **User ID:** The ID of your Discord account.
+    - **Message Count:** The number of messages you have sent.
+    - **XP:** The XP awarded by the bot.
+    - **Level:** The level assigned by the bot.
+    - **Commands Used:** The number of commands you have used.
+    - **Reported:** The number of reports you have submitted.
+    - **Reports:** The reports themselves.
+    - **Been Reported:** The number of times you have been reported.
+    - **Warnings:** Your current warnings.
+    - **NSFW Status:** If you have opted out of NSFW content.
+
+    **Logging of Commands:**
+    We log which commands you have used, except for the following commands:
+    /suggest
+    /confess
+
+    *Note: Because these aren't stored you cannot earn XP from using these commands*
+
+    # 2. Purpose of Data Collection:
+    We use this information to:
+    - Operate and improve the bot.
+    - Inform trusted moderators.
+
+    # 3. Data Retention:
+    Your data is retained as long as necessary for the purposes outlined above. If you leave the server or request deletion, your data will be removed accordingly.
+
+    # 4. User Rights:
+    You have the right to access, correct, or delete your data. If you have any concerns about your data, please contact Darkyl or check out the source code [here](https://github.com/Darkylt/Darkyl-s-Assitant).
+
+  confession: |
+    Confessions
+    This bot has a confession functionality. You can use **/confess** to send a confession. You can then specify a text and optionally an Image that can be displayed in the embed in the command. The confession is then sent to the moderators. They can choose to either approve or decline a confession. If it is approved it appears in the confessions channel. If not you won't be notified since we don't store any information that links the confession to you.
+
+    Confessions are entirely anonymous. No data is being stored that can be traced back to you.
+    We temporarily store the confession text and Image in our database until the confession has either been submitted or dismissed. This is in order to make the bot function properly.
+
+    The confessions need to follow the server Rules of course. Support for NSFW confessions might be added if requested.
+
+# Unused Sections
+# Make sure to add them to the config validation if you decide to use these
+Rules Discord: |
+  1. **Be respectful** ✨
+  2. No spamming or flooding 🚫
+  3. Keep it PG-13 outside of channels specifically marked as NSFW 🔞
+  4. Self promote only in <#1234414335996989530> 📣
+  5. Respect privacy (Don't share personal info of yourself or others. **All Messages will be saved.**) 🤐
+  6. Listen to moderators 👂
+  7. Report violations ⚠️
+  7. Avatars, nicknames and descriptions must not contain any pornographic, racist or offensive content and must consist of the Latin alphabet.
+  9. Admins or mods can add or change the rules at any time
+  10. We follow the **Discord TOS and Guidelines**
+
+Rules VC: |
+   1. Do not intentionally play loud, high-pitched or annoying tones! 🔊🚫
+   2. Avoid illegal topics 🚫📝
+   3. Do not use text-to-speech use the inbuilt Chat in Voice Channels 💬🚫
+   4. Avoid background noise such as vacuum cleaner, radio, television, etc. 🔇🚫
+
+Scams: |
+  Links may be hidden behinds other links. Verify through the pop up box that the link in chat matches the one in the pop up.
+  Here's a list of legit ways:
+  - Nitro gifts are `discord.gift`
+  - Discord staff always have a `Discord Staff` badge on their profile.
+  - Free gifts from Discord will be in your `Gift Inventory` undr `User Settings`.
+  - DMs from Discord are sent through an account with a `✔️ SYSTEM` next to their name, not bots.
+  Here are some of the scams we're aware of and ways to deal with them:
+  - A bot, sometimes even verified, sends you a legit-looking Nitro gift link in an embed, it hides a phishing link → Do not click on the link.
+  - Someone is running a giveaway of any sort → Make sure the user has a giveaway role
+  - Someone asks you to test their new game → Don't download the game.
+  - Someone tells you they reported your Steam account → Do not engage.
+  - Someone sends you a Steam trading link → Don't click it, go on Steam instead.
+  - Someone sent an image that doesn't seem to load → Don't open the image in your browser, check your internet connection and reload Discord, if it still doesn't load it's a scam.
+  - Someone is claiming you're being outed on a server for doing something bad that you know didn't happen → Do not join the server
+  - Do not Scan QR Codes
+  - Do not open images in your browser
+  - Do not download untrusted files
+  Enable 2FA if possible under `User Settings → My Account`.
+  Leave servers that you are not active in.
+  Under `User Settings → Privacy & Safety → Server Privacy Defaults` disable `Allow direct messages from server members`
+  Check out Discords Guide on `TIPS AGAINST SPAM AND HACKING` 👇
