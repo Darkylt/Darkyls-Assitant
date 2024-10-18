@@ -15,7 +15,9 @@
 
 
 import asyncio
+import json
 import os
+import sqlite3
 
 import yaml
 
@@ -47,7 +49,7 @@ try:
         secret = yaml.safe_load(f)
 except FileNotFoundError:
     raise Exception(
-        "Configuration file not found. Please make sure the secret.yml file is in the Main Folder."
+        "Configuration file not found. Please create the secret.yml file is in the Main Folder."
     )
 except yaml.YAMLError:
     raise Exception(
@@ -291,3 +293,69 @@ def validate(startup: bool = False):
         )
     # from Verification.captcha_enabling import update_captcha_status
     # asyncio.run(update_captcha_status())
+
+    # Create files and folders if necessary
+
+    required_database_files = [
+        "users.db",  # SQLite database
+        "bans.json",  # JSON file
+        "confessions.json",  # JSON file
+        "reports.json",  # JSON file
+        "verification.json",  # JSON file
+        "warnings.json",  # JSON file
+    ]
+
+    def check_and_create_files(files, path):
+        # Ensure the directory exists
+        os.makedirs(path, exist_ok=True)
+
+        for file in files:
+            file_path = os.path.join(path, file)
+
+            if not os.path.exists(file_path):
+                if file.endswith(".db"):
+                    # Create an empty SQLite database
+                    sqlite3.connect(file_path).close()  # Close after creation
+                    from bot import logger
+
+                    logger.info(f"Created SQLite database {file}")
+                elif file.endswith(".json"):
+                    # Create an empty JSON file
+                    with open(file_path, "w") as f:
+                        json.dump({}, f)  # Write an empty JSON object
+                    from bot import logger
+
+                    logger.info(f"Created JSON file {file}")
+
+    def check_and_create_additional_paths():
+        # Create the Downloaded Content directory if it doesn't exist
+        downloade_content_path = os.path.join(Paths.data_folder, "Downloaded Content")
+        os.makedirs(
+            downloade_content_path, exist_ok=True
+        )  # Create directory if it doesn't exist
+        from bot import logger
+
+        logger.info(f"Created {downloade_content_path}")
+
+        # Create the latest.log file if it doesn't exist
+        latest_log = os.path.join(Paths.logs_folder, "latest.log")
+        if not os.path.exists(latest_log):
+            with open(latest_log, "w") as f:
+                f.write("")  # Create an empty log file
+            from bot import logger
+
+            logger.info(f"Created log file {latest_log}")
+
+        pi_file = os.path.join(Paths.assets_folder, "Text", "pi.txt")
+        if not os.path.exists(pi_file):
+            # Ensure the directory exists for the pi.txt file
+            os.makedirs(os.path.dirname(pi_file), exist_ok=True)
+            with open(pi_file, "w") as f:
+                f.write("3.141")  # Write the value of pi
+            logger.info(f"Created pi file with value 3.141 at {pi_file}")
+
+    check_and_create_files(
+        required_database_files, os.path.join(Paths.data_folder, "Database")
+    )
+
+    check_and_create_additional_paths()
