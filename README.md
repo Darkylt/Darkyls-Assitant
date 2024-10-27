@@ -19,7 +19,7 @@ Built using Hikari, Lightbulb and Miru
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/darkyls-assistant.git
+   git clone https://github.com/Darkylt/darkyls-assistant.git
    ```
 
 2. Navigate to the project directory:
