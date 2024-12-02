@@ -74,11 +74,9 @@ async def resize_image(image_path, res=500):
     A function to resize a square image
     """
     try:
-        # Open the image file
         with Image.open(image_path) as img:
             resized_img = img.resize((res, res))
 
-            # Save the resized image, you can change the output path and format as needed
             resized_img.save(image_path)
     except Exception as e:
         from bot import logger
@@ -89,35 +87,27 @@ async def resize_image(image_path, res=500):
 async def make_card(
     background_path, scale_factor=config.Join.welcome_card_scale_factor
 ):
-    # Open the images
     background = Image.open(background_path)
     overlay = Image.open(config.Join.overlay_path)
 
-    # Create a blank canvas with the dimensions of the overlay
     overlay_width, overlay_height = overlay.size
     canvas = Image.new("RGBA", (overlay_width, overlay_height), (0, 0, 0, 0))
 
-    # Calculate the scaling factor to fit the background image into the canvas
     bg_width, bg_height = background.size
     new_bg_width = int(bg_width * scale_factor)
     new_bg_height = int(bg_height * scale_factor)
 
-    # Resize the background image proportionally
     background = background.resize((new_bg_width, new_bg_height))
 
-    # Calculate position to place resized background image in the center of the canvas
     position = (
         (overlay_width - new_bg_width) // 2,
         (overlay_height - new_bg_height) // 2,
     )
 
-    # Paste the resized background image onto the canvas
     canvas.paste(background, position)
 
-    # Overlay the overlay image on top of the canvas
     canvas.paste(overlay, (0, 0), overlay)
 
-    # Save the final image with the resolution of the overlay
     canvas.save(background_path)
 
 
@@ -155,16 +145,11 @@ async def make_love_images(user1_path, user2_path, user1_id, user2_id) -> str:
     png_overlay_folder_path = os.path.join(config.Paths.assets_folder, "Love images")
     png_overlay_path = await utils.choose_random_file(png_overlay_folder_path)
 
-    # Load and prepare the overlay image
     overlay_img = Image.open(png_overlay_path).convert("RGBA")
-    overlay_img = overlay_img.resize(
-        user2_img.size
-    )  # Resize overlay to match user2_img
+    overlay_img = overlay_img.resize(user2_img.size)
 
-    # Composite the images
     combined_img = Image.alpha_composite(user2_img, overlay_img)
 
-    # Save the combined image
     overlayed_image_path = str(
         os.path.join(
             config.Paths.data_folder, "Downloaded Content", f"{user1_id}_{user2_id}.png"
@@ -268,19 +253,14 @@ async def quote_generator(message: str, username: str, pfp: str, date: str) -> s
 
 
 def average_color(image_path):
-    # Open the image
     image = Image.open(image_path)
 
-    # Resize the image to a small size for faster processing if needed
     image.thumbnail((100, 100))
 
-    # Convert the image to RGB mode if it's not already
     image = image.convert("RGB")
 
-    # Get the image data
     pixels = list(image.getdata())
 
-    # Calculate the average RGB values
     avg_red = int(sum(pixel[0] for pixel in pixels) / len(pixels))
     avg_green = int(sum(pixel[1] for pixel in pixels) / len(pixels))
     avg_blue = int(sum(pixel[2] for pixel in pixels) / len(pixels))

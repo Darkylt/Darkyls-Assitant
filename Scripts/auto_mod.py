@@ -81,27 +81,21 @@ async def extract_urls(content: str) -> list:
         Return: ["youtube.com", "darkylmusic.com"]
     """
     try:
-        # Improved regular expression to find URLs or domains in the content
         url_pattern = re.compile(
             r"https?://[^\s/$.?#].[^\s]*|www\.[^\s/$.?#].[^\s]*|[^\s/$.?#]+\.[^\s/$.?#]+"
         )
         matches = url_pattern.findall(content)
 
-        # Extract domains from the matches
         domains = set()
         for match in matches:
-            # Handle URLs starting with 'www.'
             if match.startswith("www."):
                 match = "http://" + match
 
-            # Parse URL
             parsed_url = urlparse(match)
             domain = parsed_url.netloc or parsed_url.path
 
-            # Remove any trailing paths or fragments
             domain = domain.split("/")[0]
 
-            # Handle cases where domain might include port number
             domain = domain.split(":")[0]
 
             # Remove subdomains, keeping only the main domain
@@ -138,14 +132,11 @@ async def check_url(content: str):
             config.Paths.data_folder, "whitelisted_sites.txt"
         )
 
-        # Read the whitelist file and store allowed domains in a set
         with open(allow_list_path, "r") as file:
             allowed_domains = {line.strip() for line in file if line.strip()}
 
-        # Extract domains from the content
         urls = await extract_urls(content)
 
-        # Check if any of the extracted URLs are not in the whitelist
         for url in urls:
             if url not in allowed_domains:
                 status = True

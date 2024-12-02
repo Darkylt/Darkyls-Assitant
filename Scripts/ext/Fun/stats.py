@@ -44,7 +44,6 @@ async def stats_command(ctx: lightbulb.SlashContext):
         "Getting stats... *(This command takes some time to compute)*"
     )
 
-    # Unpack the tuple returned by count_lines_in_files
     lines, file_count = await utils.count_lines_in_files(
         directory=config.Paths.root_folder
     )

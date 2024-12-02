@@ -55,10 +55,10 @@ async def f_message_command(ctx: lightbulb.Context):
 
     from bot import logger
 
-    logger.info(f"{ctx.author.username} used respect message command.")  #
+    logger.info(f"{ctx.author.username} used respect message command.")
 
     message = getattr(ctx.options, "target", None)
-    author = message.author  #
+    author = message.author
 
     msg = await plugin.app.rest.fetch_message(ctx.channel_id, message)
 

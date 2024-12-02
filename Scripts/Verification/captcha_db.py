@@ -124,7 +124,6 @@ async def delete_entries_from_user_id(user_id: int):
             if details[0] != user_id
         }
 
-        # Write the updated data back to the database
         async with aiofiles.open(DB_PATH, "w") as file:
             await file.write(json.dumps(updated_data, indent=4))
 

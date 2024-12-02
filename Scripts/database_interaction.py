@@ -242,7 +242,6 @@ class Users:
                         params.append(int(user_id))
                         cursor.execute(sql, params)
 
-                    # Check if any rows were affected
                     if cursor.rowcount == 0:
                         # No rows were updated, user does not exist, create user entry
                         Users.create_entry(
@@ -380,9 +379,7 @@ class Messages:
             new_message (tuple): The new message entry if successfully created
             None: If there was an error
         """
-        # Convert the boolean 'attachments' to an integer (0 or 1)
         attachments = int(attachments)
-        # Set current timestamp if not provided
         created_at = created_at or datetime.now(timezone.utc).isoformat()
 
         try:
@@ -453,7 +450,6 @@ class Messages:
             new_message (tuple): The new message edit entry if successfully created
             None: If there was an error
         """
-        # Convert the boolean 'attachments' to an integer (0 or 1)
         attachments = int(attachments)
 
         try:
@@ -461,7 +457,6 @@ class Messages:
             if connection:
                 with connection:
                     cursor = connection.cursor()
-                    # Retrieve the current maximum 'edited' value for the given msg_id
                     cursor.execute(
                         "SELECT MAX(edited) FROM messages WHERE msg_id = ?", (msg_id,)
                     )

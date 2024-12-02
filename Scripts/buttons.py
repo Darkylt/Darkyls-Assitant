@@ -378,10 +378,8 @@ class Report(miru.View):
 
             # Check if user already exists in the data dictionary
             if user_id in data:
-                # Append new reason to existing list of reasons
                 data[user_id].append(reason)
             else:
-                # Create a new entry with the user ID and a list containing the new reason
                 data[user_id] = [reason]
 
             if len(data.get(user_id, [])) > 2 and len(data.get(user_id, [])) < 4:
@@ -500,19 +498,14 @@ class Report(miru.View):
             config.Paths.data_folder, "Database", "reports.json"
         )
 
-        # Load the data from warnings.json
         with open(database_path, "r") as file:
             warnings_data = json.load(file)
 
-        # Iterate over each user entry in the data
         for user_id, user_data in warnings_data.items():
-            # Iterate over each reason in the user's data
             for reason, reason_data in user_data["reasons"].items():
-                # Check if the report_message matches the message id
                 if reason_data["report_message"] == message_id:
-                    # Remove the reason
                     del warnings_data[user_id]["reasons"][reason]
-                    break  # Exit the inner loop once the reason is found
+                    break
 
         # Write the updated data back to warnings.json
         with open(database_path, "w") as file:
@@ -580,10 +573,8 @@ class ModMenu(miru.View):
 
         mentions = ctx.message.content
 
-        # Remove first two and last characters
         mentions = mentions[2:-1]
 
-        # Convert to integer
         try:
             mentions_int = int(mentions)
         except ValueError:
@@ -617,10 +608,8 @@ class ModMenu(miru.View):
 
         mentions = ctx.message.content
 
-        # Remove first two and last characters
         mentions = mentions[2:-1]
 
-        # Convert to integer
         try:
             mentions_int = int(mentions)
         except ValueError:
@@ -655,10 +644,8 @@ class ModMenu(miru.View):
 
         mentions = ctx.message.content
 
-        # Remove first two and last characters
         mentions = mentions[2:-1]
 
-        # Convert to integer
         try:
             mentions_int = int(mentions)
         except ValueError:
@@ -961,7 +948,7 @@ class RockPaperScissors(miru.View):
         3: Scissors
         """
 
-        cheat = False
+        cheat = False  # Bot always wins
         always_loose = False
         always_tie = False
 
@@ -977,7 +964,6 @@ class RockPaperScissors(miru.View):
     async def handle_choice(self, ctx: miru.ViewContext, user_choice: int) -> None:
         bot_choice = await RockPaperScissors.choose(user_choice)
 
-        # Define constants for colors
         WIN_COLOR = 0x00FF00  # Green
         LOSE_COLOR = 0xFF0000  # Red
         TIE_COLOR = 0xFFFF00  # Yellow

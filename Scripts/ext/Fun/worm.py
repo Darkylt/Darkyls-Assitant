@@ -46,10 +46,8 @@ async def worm_command(ctx: lightbulb.SlashContext):
 
     view = buttons.Worm()
 
-    # Get the message object for updating
     message = await ctx.respond("Initializing worm simulator...", components=view)
 
-    # Get text output generator from simulator
     image_generator = worm_simulator.run_worm_simulator()
 
     embed = hikari.Embed(
@@ -70,7 +68,6 @@ async def worm_command(ctx: lightbulb.SlashContext):
         content="",
     )
 
-    # Continuously update the response message
     async for image in image_generator:
         try:
             file = hikari.File(image)

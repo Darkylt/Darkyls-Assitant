@@ -44,7 +44,6 @@ async def amismart_command(ctx: lightbulb.SlashContext, user=hikari.Member):
         mention = user.mention
         message = "{user}'s IQ is {iq}."
 
-    # Special case handling
     if id == config.Bot.owner_id:
         await ctx.respond(message.format(iq="-∞", user=mention))
         return

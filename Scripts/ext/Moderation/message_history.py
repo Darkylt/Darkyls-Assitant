@@ -49,14 +49,11 @@ async def message_history_command(ctx: lightbulb.SlashContext, message_id: int) 
         )
         return
 
-    # Ensure result is a list for consistent processing
     if isinstance(result, dict):
-        result = [result]  # Convert single dictionary to list
+        result = [result]
 
-    # Limit the results to the last 10 entries because that is the embed limit
     result = result[-10:]
 
-    # Create a list to hold embed objects
     embeds = []
 
     for entry in result:

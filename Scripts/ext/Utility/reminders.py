@@ -125,14 +125,11 @@ async def set_reminder_command(
                     int(year), int(month), int(day), hour, int(minute)
                 )
 
-            # Localize or convert time based on timezone
             if reminder_time:
                 user_timezone = pytz.timezone(timezone)
                 if reminder_time.tzinfo is None:
-                    # If the datetime object is naive, localize it
                     reminder_time = user_timezone.localize(reminder_time)
                 else:
-                    # If the datetime object is already aware, convert it to user timezone
                     reminder_time = reminder_time.astimezone(user_timezone)
 
                 # Convert to UTC
@@ -243,7 +240,6 @@ async def check_reminders():
                 try:
                     user_timezone = pytz.timezone(user_timezone_str)
                 except pytz.UnknownTimeZoneError:
-                    # Handle unknown timezone error
                     continue
 
                 reminder_time_user_timezone = reminder_time_utc.replace(
@@ -256,7 +252,6 @@ async def check_reminders():
                 if reminder_time_user_timezone <= now_user_timezone:
                     await execute_reminder(reminder)
 
-                    # Update reminder status to completed
                     db.Reminders.complete_reminder(reminder["id"])
 
             await asyncio.sleep(15)

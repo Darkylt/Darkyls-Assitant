@@ -88,7 +88,6 @@ async def warn_member(user_id: int, reason: str) -> bool:
 
         user_id = str(user_id)
 
-        # Use setdefault() to append reason to existing warnings or create a new list if user has no warnings
         if user_id in data:
             data[user_id].append(reason)
         else:

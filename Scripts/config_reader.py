@@ -297,16 +297,15 @@ def validate(startup: bool = False):
     # Create files and folders if necessary
 
     required_database_files = [
-        "users.db",  # SQLite database
-        "bans.json",  # JSON file
-        "confessions.json",  # JSON file
-        "reports.json",  # JSON file
-        "verification.json",  # JSON file
-        "warnings.json",  # JSON file
+        "users.db",
+        "bans.json",
+        "confessions.json",
+        "reports.json",
+        "verification.json",
+        "warnings.json",
     ]
 
     def check_and_create_files(files, path):
-        # Ensure the directory exists
         os.makedirs(path, exist_ok=True)
 
         for file in files:
@@ -328,11 +327,8 @@ def validate(startup: bool = False):
                     logger.info(f"Created JSON file {file}")
 
     def check_and_create_additional_paths():
-        # Create the Downloaded Content directory if it doesn't exist
         downloade_content_path = os.path.join(Paths.data_folder, "Downloaded Content")
-        os.makedirs(
-            downloade_content_path, exist_ok=True
-        )  # Create directory if it doesn't exist
+        os.makedirs(downloade_content_path, exist_ok=True)
         from bot import logger
 
         logger.info(f"Created {downloade_content_path}")

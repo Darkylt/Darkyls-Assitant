@@ -133,12 +133,9 @@ async def pi_fact_command(ctx: lightbulb.context.SlashContext) -> None:
         with open(facts_file, "r", encoding="utf-8") as file:
             facts = file.readlines()
             random_fact = random.choice(facts)
-            # Splitting the first sentence
             sentences = random_fact.split(".")
             first_sentence = sentences[0] + "."
-            rest_of_the_line = ".".join(
-                sentences[1:]
-            ).strip()  # Joining the remaining sentences
+            rest_of_the_line = ".".join(sentences[1:]).strip()
 
         await ctx.respond(f"**{first_sentence}** {rest_of_the_line}")
     except Exception as e:
@@ -193,7 +190,6 @@ def get_segment_statistic(segment: int, total_digits: int):
                 f"**{digit}**: *{count} times,* {percentage:.4f}% of segment\n"
             )
 
-    # List numbers not in the segment
     all_digits = set("0123456789")
     present_digits = set(str_segment)
     missing_digits = all_digits - present_digits
@@ -212,7 +208,6 @@ def get_segment_statistic(segment: int, total_digits: int):
         f"Odd digits: {odd_count} times, {odd_percentage:.2f}% of segment"
     )
 
-    # Calculate mean, median, and mode
     mean_value = mean(digits_list)
     median_value = median(digits_list)
 
@@ -287,37 +282,27 @@ def find_longest_repeating_sequence(segment: str) -> str:
 
 
 def generate_pie_chart(number, filename="pie_chart.png"):
-    # Convert the number to a string to iterate over each digit
     number_str = str(number)
 
-    # Count the frequency of each digit using Counter
     digit_counts = Counter(number_str)
 
-    # Prepare data for the pie chart
     labels = list(digit_counts.keys())
     sizes = list(digit_counts.values())
-    colors = plt.cm.tab20c.colors  # Use a colormap for colors
+    colors = plt.cm.tab20c.colors
 
-    # Generate the pie chart
-    fig, ax = plt.subplots(
-        figsize=(8, 8), facecolor="#171717"
-    )  # Set figure background color
+    fig, ax = plt.subplots(figsize=(8, 8), facecolor="#171717")
     wedges, texts, autotexts = ax.pie(
         sizes, labels=labels, autopct="%1.1f%%", startangle=90, colors=colors
     )
-    ax.axis("equal")  # Equal aspect ratio ensures that pie is drawn as a circle.
+    ax.axis("equal")
 
-    # Customize font properties
     plt.setp(texts, size=12, weight="bold", color="#e8e8e8")
     plt.setp(autotexts, size=10, weight="bold", color="#0d0d0d")
 
-    # Set title with custom font
     plt.title("Frequency of Each Digit", fontsize=16, weight="bold", color="#e8e8e8")
 
-    # Set the background color for the axes
     ax.set_facecolor("#171717")
 
-    # Save the pie chart as an image
     plt.savefig(filename, bbox_inches="tight", facecolor=fig.get_facecolor())
     plt.close(fig)
 

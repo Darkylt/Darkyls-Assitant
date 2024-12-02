@@ -46,18 +46,13 @@ async def warn_command(
             with open(database_path, "r") as file:
                 data = json.load(file)
 
-        # Convert user ID to string
         user_id = str(user.id)
 
-        # Check if user already exists in the data dictionary
         if user_id in data:
-            # Append new reason to existing list of reasons
             data[user_id].append(reason)
         else:
-            # Create a new entry with the user ID and a list containing the new reason
             data[user_id] = [reason]
 
-        # Write the updated data back to the JSON file
         with open(database_path, "w") as file:
             json.dump(data, file, indent=4)
 
@@ -125,7 +120,6 @@ async def clear_warnings_command(ctx: lightbulb.SlashContext):
 
         user_id = str(user.id)
 
-        # Load existing data from the JSON file
         database_path = os.path.join(
             config.Paths.data_folder, "Database", "warnings.json"
         )
@@ -136,10 +130,8 @@ async def clear_warnings_command(ctx: lightbulb.SlashContext):
                 except json.JSONDecodeError:
                     data = {}
         else:
-            # No data in the file
             data = {}
 
-        # Remove the user's entry from the data dictionary if it exists
         if user_id in data:
             del data[user_id]
         else:
@@ -148,7 +140,6 @@ async def clear_warnings_command(ctx: lightbulb.SlashContext):
             )
             return
 
-        # Write the updated data back to the JSON file
         with open(database_path, "w") as file:
             json.dump(data, file, indent=4)
 
@@ -198,7 +189,6 @@ async def clear_warnings_command(ctx: lightbulb.SlashContext):
 
     try:
 
-        # Load existing data from the JSON file
         database_path = os.path.join(
             config.Paths.data_folder, "Database", "warnings.json"
         )
@@ -209,10 +199,8 @@ async def clear_warnings_command(ctx: lightbulb.SlashContext):
                 except json.JSONDecodeError:
                     data = {}
         else:
-            # No data in the file
             data = {}
 
-        # Remove the user's entry from the data dictionary if it exists
         if user_id in data:
             del data[user_id]
         else:
@@ -222,7 +210,6 @@ async def clear_warnings_command(ctx: lightbulb.SlashContext):
             )
             return
 
-        # Write the updated data back to the JSON file
         with open(database_path, "w") as file:
             json.dump(data, file, indent=4)
 

@@ -54,13 +54,10 @@ async def add_tip_command(ctx: lightbulb.SlashContext):
 
         database = os.path.join(config.Paths.assets_folder, "Text", "tips.json")
 
-        # Check if the JSON file exists and is not empty
         if os.path.exists(database) and os.path.getsize(database) > 0:
-            # Load existing data from JSON file
             with open(database, "r") as file:
                 data = json.load(file)
         else:
-            # If the file doesn't exist or is empty, initialize with an empty dictionary
             data = {"tips": []}
 
         tip = getattr(ctx.options, "tip", None, flags=hikari.MessageFlag.EPHEMERAL)
@@ -69,10 +66,8 @@ async def add_tip_command(ctx: lightbulb.SlashContext):
             await ctx.respond("Couldn't read tip")
             return
 
-        # Append the new fact to the list
         data["tips"].append(tip)
 
-        # Write the updated data back to the file
         with open(database, "w") as file:
             json.dump(data, file, indent=4)
 

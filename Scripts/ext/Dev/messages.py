@@ -26,10 +26,7 @@ plugin = lightbulb.Plugin("Messages", "Manages message database entries")
 
 
 async def sanitize_content(content: str) -> str:
-    # Remove leading and trailing whitespace
     content = str(content.strip())
-    # Optionally, you can escape specific characters if needed
-    # e.g., content = re.sub(r'[<>]', '', content)  # Removes < and > characters
     return content
 
 

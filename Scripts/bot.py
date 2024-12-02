@@ -54,7 +54,6 @@ miru_client = miru.Client(bot)
 
 logging.basicConfig(level=logging.DEBUG)  # Set the default logging level
 
-# Clear latest.log before writing to it
 # with open(os.path.join(config.Paths.logs_folder, "latest.log"), 'w'):
 #    pass
 
@@ -125,21 +124,17 @@ class Logging:
             logging.DEBUG
         )  # Set the logging level for the file handler
 
-        # Create a formatter to specify the log message format
         formatter = logging.Formatter(
             "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
         )
 
-        # Attach the formatter to each file handler
         latest_file_handler.setFormatter(formatter)
         time_file_handler.setFormatter(formatter)
 
-        # Add the custom filter to the handlers
         exclude_filter = Logging.LoggingExcludeFilter()
         latest_file_handler.addFilter(exclude_filter)
         time_file_handler.addFilter(exclude_filter)
 
-        # Get the root logger and add the file handlers to it
         root_logger = logging.getLogger()
         root_logger.addHandler(latest_file_handler)
         root_logger.addHandler(time_file_handler)

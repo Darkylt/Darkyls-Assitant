@@ -70,25 +70,20 @@ async def choose_random_file(folder_path: str):
     """
     Takes in a path and returns the path to a random file in that directory
     """
-    # Check if the provided path is a directory
     if not os.path.isdir(folder_path):
         return "Error: The provided path is not a directory."
 
-    # Get a list of all files in the directory
     files = [
         f
         for f in os.listdir(folder_path)
         if os.path.isfile(os.path.join(folder_path, f))
     ]
 
-    # Check if the directory is empty
     if not files:
         return "Error: The directory is empty."
 
-    # Choose a random file from the list
     random_file = random.choice(files)
 
-    # Return the path to the randomly chosen file
     return str(os.path.join(folder_path, random_file))
 
 
@@ -579,13 +574,11 @@ async def count_lines_in_files(
     total_lines = 0
     file_count = 0
 
-    # List files in the directory
     for root, dirs, files in os.walk(directory):
         for file in files:
             file_path = os.path.join(root, file)
 
             try:
-                # Count lines in each file
                 with open(file_path, "r", encoding="utf-8") as f:
                     lines = f.readlines()
                     total_lines += len(lines)
@@ -627,10 +620,8 @@ def format_dt(time: datetime.datetime, style: str | None = None) -> str:
 def iso_8601_to_discord_timestamp(time: str) -> str:
     created_at = datetime.datetime.fromisoformat(time)
 
-    # Assume the datetime is in UTC and make it timezone-aware
     created_at = created_at.replace(tzinfo=datetime.timezone.utc)
 
-    # Convert to Unix timestamp
     unix_timestamp = int(created_at.timestamp())
 
     # Format as Discord timestamp
@@ -961,33 +952,25 @@ class QRCode:
             qr_img = Image.open(tmp_filepath).convert("RGBA")
 
             if icon:
-                icon_size = (
-                    qr_img.size[0] // 4
-                )  # Set the icon size relative to the QR code size
+                icon_size = qr_img.size[0] // 4
                 icon_img = icon.copy().convert("RGBA")
                 icon_img.thumbnail((icon_size, icon_size))
 
-                # Calculate the size of the background with the margin
                 bg_size = (icon_img.width + 2 * margin, icon_img.height + 2 * margin)
                 background = Image.new("RGBA", bg_size, color_background)
 
-                # Create a new image that will serve as the overlay with a transparent background
                 overlay = Image.new("RGBA", qr_img.size, (255, 255, 255, 0))
 
-                # Calculate the position of the background with margin
                 bg_position = (
                     (qr_img.size[0] - bg_size[0]) // 2,
                     (qr_img.size[1] - bg_size[1]) // 2,
                 )
                 icon_position = (bg_position[0] + margin, bg_position[1] + margin)
 
-                # Paste the solid color background onto the overlay at the icon position
                 overlay.paste(background, bg_position)
 
-                # Composite the overlay with the QR code image
                 qr_img = Image.alpha_composite(qr_img, overlay)
 
-                # Paste the icon on top of the modified QR code image
                 qr_img.paste(icon_img, icon_position, icon_img)
 
             qr_img.save(filepath)
