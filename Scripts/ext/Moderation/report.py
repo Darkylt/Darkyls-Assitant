@@ -35,7 +35,7 @@ plugin = lightbulb.Plugin("Report", "Allows users to report members")
 @lightbulb.option("reason", "Why are you reporting this user?", type=str, required=True)
 @lightbulb.command("report", "Report a user to the mods.")
 @lightbulb.implements(lightbulb.SlashCommand)
-async def report_command(ctx: lightbulb.SlashCommand):
+async def report_command(ctx: lightbulb.SlashContext):
     """
     A command used to report a user.
 
