@@ -89,5 +89,13 @@ async def on_startup(event: hikari.StartedEvent):
     asyncio.create_task(run())
 
 
+def load(bot):
+    bot.add_plugin(plugin)
+
+
+def unload(bot):
+    bot.remove(plugin)
+
+
 if __name__ == "__main__":
     app.run(port=5000)
