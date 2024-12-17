@@ -32,6 +32,7 @@ server = 1284115021152124948  # DEBUG server
 
 backup_path = os.path.join(config.Paths.data_folder, "Server Backups")
 backup_file_path = os.path.join(backup_path, f"{server}_server_backup.json")
+backup_data_memory = {}
 
 
 async def download_image(url, backup_file_path):
@@ -48,12 +49,13 @@ async def download_image(url, backup_file_path):
 
 
 async def create_backup():
+    global backup_data_memory
+
     os.makedirs(backup_path, exist_ok=True)
 
     guild = await plugin.app.rest.fetch_guild(server)
     guild_channels = await plugin.app.rest.fetch_guild_channels(server)
 
-    # Gather guild information
     guild_info = {
         "id": guild.id,
         "name": guild.name,
@@ -64,7 +66,6 @@ async def create_backup():
         "banner_url": guild.banner_url,
     }
 
-    # Download icon and banner if they exist
     icon_backup_file_path = None
     banner_backup_file_path = None
 
@@ -102,24 +103,19 @@ async def create_backup():
             }
         )
 
-    # Add the guild information (including paths to icon and banner if downloaded)
-    backup_info = {
+    backup_data_memory = {
         "guild": guild_info,
         "icon_backup_file_path": icon_backup_file_path,
         "banner_backup_file_path": banner_backup_file_path,
         "channels": backup_data,
     }
 
-    # Save to JSON file
-    with open(backup_file_path, "w") as file:
-        json.dump(backup_info, file, indent=4)
-
-    print("Backup created successfully!")
-
-    return backup_file_path
+    print("Backup data stored in memory successfully!")
 
 
 async def lockdown(reason):
+    global backup_data_memory
+
     guild_channels = await plugin.app.rest.fetch_guild_channels(server)
 
     deny_perms_text = (
@@ -143,7 +139,7 @@ async def lockdown(reason):
         timestamp=datetime.datetime.now().astimezone(),
     )
     embed.set_author(
-        name="Darkyl's Assitant",
+        name="Darkyl's Assistant",
         url="https://darkylmusic.com/discord-bot/",
         icon="https://darkylmusic.com/assets/images/discord/pfp.png",
     )
@@ -176,32 +172,69 @@ async def lockdown(reason):
     lockdown_messages = {}
 
     for channel in guild_channels:
+
+        # Fetch existing permission overwrites for @everyone role
+        existing_overwrite = next(
+            (po for po in channel.permission_overwrites.values() if po.id == server),
+            None,
+        )
+        existing_deny = (
+            existing_overwrite.deny if existing_overwrite else Permissions.NONE
+        )
+
         if channel.type.name == "GUILD_TEXT":
+            # Combine existing denies with lockdown denies
+            new_deny = existing_deny | deny_perms_text
+
+            # Update permissions
             await plugin.app.rest.edit_permission_overwrite(
                 channel=channel.id,
-                target=server,  # For some reason the role ID for @everyone is the same as the server ID so let's roll with it
+                target=server,  # @everyone
                 target_type=hikari.PermissionOverwriteType.ROLE,
-                deny=deny_perms_text,
-                reason="Lockdown.",
-            )
-            message = await plugin.app.rest.create_message(channel.id, embed=embed)
-            lockdown_messages[str(channel.id)] = message.id
-        elif channel.type.name == "GUILD_VOICE":
-            await plugin.app.rest.edit_permission_overwrite(
-                channel=channel.id,
-                target=server,
-                target_type=hikari.PermissionOverwriteType.ROLE,
-                deny=deny_perms_voice,
+                deny=new_deny,
                 reason="Lockdown.",
             )
 
-    # Save lockdown messages to the backup file
-    with open(backup_path, "r+") as backup_file:
-        backup_data = json.load(backup_file)
-        backup_data["messages"] = lockdown_messages
-        backup_file.seek(0)
-        json.dump(backup_data, backup_file, indent=4)
-        backup_file.truncate()
+            # Send lockdown notification
+            message = await plugin.app.rest.create_message(channel.id, embed=embed)
+            lockdown_messages[str(channel.id)] = message.id
+
+        elif channel.type.name == "GUILD_VOICE":
+            # Combine existing denies with lockdown denies
+            new_deny = existing_deny | deny_perms_voice
+
+            # Update permissions
+            await plugin.app.rest.edit_permission_overwrite(
+                channel=channel.id,
+                target=server,  # @everyone
+                target_type=hikari.PermissionOverwriteType.ROLE,
+                deny=new_deny,
+                reason="Lockdown.",
+            )
+
+    # Add lockdown messages to the backup data
+    if "messages" not in backup_data_memory:
+        backup_data_memory["messages"] = {}
+
+    backup_data_memory["messages"].update(lockdown_messages)
+
+
+async def save_backup_to_file():
+    """Function to write the global backup data to a file."""
+    global backup_data_memory
+
+    if not backup_data_memory:
+        print("No backup data found in memory. Nothing to save.")
+        return
+
+    try:
+        with open(backup_file_path, "w") as file:
+            json.dump(backup_data_memory, file, indent=4)
+        print(f"Backup data saved to file: {backup_file_path}")
+    except PermissionError as e:
+        print(f"Failed to save backup file due to permission error: {e}")
+    except Exception as e:
+        print(f"An unexpected error occurred while saving the backup: {e}")
 
 
 def load_backup():
@@ -257,6 +290,8 @@ async def lockdown_command(ctx: lightbulb.SlashContext, reason: str):
     await message.edit("Going into lockdown...")
 
     await lockdown(reason)
+
+    await save_backup_to_file()
 
 
 def load(bot):
