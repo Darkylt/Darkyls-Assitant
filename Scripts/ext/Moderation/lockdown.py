@@ -173,6 +173,8 @@ async def lockdown(reason):
         text="Thank you for your patience and understanding during this time. We aim to restore full functionality as soon as possible."
     )
 
+    lockdown_messages = {}
+
     for channel in guild_channels:
         if channel.type.name == "GUILD_TEXT":
             await plugin.app.rest.edit_permission_overwrite(
@@ -182,7 +184,8 @@ async def lockdown(reason):
                 deny=deny_perms_text,
                 reason="Lockdown.",
             )
-            await plugin.app.rest.create_message(channel.id, embed=embed)
+            message = await plugin.app.rest.create_message(channel.id, embed=embed)
+            lockdown_messages[str(channel.id)] = message.id
         elif channel.type.name == "GUILD_VOICE":
             await plugin.app.rest.edit_permission_overwrite(
                 channel=channel.id,
@@ -191,6 +194,14 @@ async def lockdown(reason):
                 deny=deny_perms_voice,
                 reason="Lockdown.",
             )
+
+    # Save lockdown messages to the backup file
+    with open(backup_path, "r+") as backup_file:
+        backup_data = json.load(backup_file)
+        backup_data["messages"] = lockdown_messages
+        backup_file.seek(0)
+        json.dump(backup_data, backup_file, indent=4)
+        backup_file.truncate()
 
 
 def load_backup():
