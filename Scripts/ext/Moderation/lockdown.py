@@ -245,6 +245,29 @@ async def lockdown_channels(reason):
     backup_data_memory["messages"].update(lockdown_messages)
 
 
+async def lockdown_members():
+    role_ids = [1313915844102721607]
+
+    members = await plugin.app.rest.fetch_members(server)
+
+    for member in members:
+        try:
+            current_roles = await member.fetch_roles()
+
+            # Extract role IDs from the Role objects
+            current_role_ids = {role.id for role in current_roles}
+
+            roles_to_remove = current_role_ids.intersection(set(role_ids))
+
+            for role_id in roles_to_remove:
+                await member.remove_role(role_id, reason="Lockdown.")
+
+        except Exception as e:
+            from bot import logger
+
+            logger.error(f"Error removing roles from member {member.id}: {e}")
+
+
 async def save_backup_to_file():
     """Function to write the global backup data to a file."""
     global backup_data_memory
@@ -316,6 +339,8 @@ async def lockdown_command(ctx: lightbulb.SlashContext, reason: str):
     await message.edit("Going into lockdown...")
 
     await lockdown_channels(reason)
+
+    await lockdown_members()
 
     await save_backup_to_file()
 
