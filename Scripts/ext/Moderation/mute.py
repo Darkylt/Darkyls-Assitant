@@ -122,7 +122,7 @@ async def configure_mute_role_command(ctx: lightbulb.SlashContext) -> None:
         await plugin.app.rest.edit_permission_overwrite(
             channel=channel.id,
             target=muted_role,
-            target_type=hikari.PermissionOverwriteType.ROLE,  # Specify the target type
+            target_type=hikari.PermissionOverwriteType.ROLE,
             deny=overwrite.deny,
             allow=overwrite.allow,
             reason="Restricting permissions for muted role.",
