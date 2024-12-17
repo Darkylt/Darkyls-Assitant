@@ -173,7 +173,35 @@ async def lockdown_channels(reason):
 
     for channel in guild_channels:
         if channel.type.name == "GUILD_TEXT" or channel.type.name == "GUILD_VOICE":
-            # Get existing permission overwrite for @everyone (server role)
+            for overwrite in channel.permission_overwrites.values():
+                role_id = overwrite.id
+                # Skip if the overwrite is for @everyone
+                if role_id == server:
+                    continue
+
+                existing_allow = overwrite.allow if overwrite else Permissions.NONE
+                existing_deny = overwrite.deny if overwrite else Permissions.NONE
+
+                # Determine the new deny permissions based on channel type
+                if channel.type.name == "GUILD_TEXT":
+                    new_deny = existing_deny | deny_perms_text
+                elif channel.type.name == "GUILD_VOICE":
+                    new_deny = existing_deny | deny_perms_voice
+
+                # Keep the 'allow' permissions that do not contradict the new denies
+                new_allow = existing_allow & ~new_deny
+
+                # Update permissions for this role
+                await plugin.app.rest.edit_permission_overwrite(
+                    channel=channel.id,
+                    target=role_id,
+                    target_type=hikari.PermissionOverwriteType.ROLE,
+                    allow=new_allow,
+                    deny=new_deny,
+                    reason="Lockdown.",
+                )
+
+            # Apply lockdown to the @everyone role (server role)
             existing_overwrite = next(
                 (
                     po
@@ -182,8 +210,6 @@ async def lockdown_channels(reason):
                 ),
                 None,
             )
-
-            # Get existing 'allow' and 'deny' permissions
             existing_allow = (
                 existing_overwrite.allow if existing_overwrite else Permissions.NONE
             )
@@ -191,7 +217,6 @@ async def lockdown_channels(reason):
                 existing_overwrite.deny if existing_overwrite else Permissions.NONE
             )
 
-            # Determine the new deny permissions
             if channel.type.name == "GUILD_TEXT":
                 new_deny = existing_deny | deny_perms_text
             elif channel.type.name == "GUILD_VOICE":
@@ -200,7 +225,7 @@ async def lockdown_channels(reason):
             # Keep the 'allow' permissions that do not contradict the new denies
             new_allow = existing_allow & ~new_deny
 
-            # Update permissions for @everyone role
+            # Update permissions for the @everyone role
             await plugin.app.rest.edit_permission_overwrite(
                 channel=channel.id,
                 target=server,  # @everyone
