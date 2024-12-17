@@ -246,9 +246,14 @@ async def lockdown_channels(reason):
 
 
 async def lockdown_members():
+    global backup_data_memory
+
     role_ids = [1313915844102721607]
 
     members = await plugin.app.rest.fetch_members(server)
+
+    if "removed_roles" not in backup_data_memory:
+        backup_data_memory["removed_roles"] = {}
 
     for member in members:
         try:
@@ -261,6 +266,10 @@ async def lockdown_members():
 
             for role_id in roles_to_remove:
                 await member.remove_role(role_id, reason="Lockdown.")
+
+                if str(member.id) not in backup_data_memory["removed_roles"]:
+                    backup_data_memory["removed_roles"][str(member.id)] = []
+                backup_data_memory["removed_roles"][str(member.id)].append(role_id)
 
         except Exception as e:
             from bot import logger
