@@ -113,7 +113,7 @@ async def create_backup():
     print("Backup data stored in memory successfully!")
 
 
-async def lockdown(reason):
+async def lockdown_channels(reason):
     global backup_data_memory
 
     guild_channels = await plugin.app.rest.fetch_guild_channels(server)
@@ -191,16 +191,14 @@ async def lockdown(reason):
                 existing_overwrite.deny if existing_overwrite else Permissions.NONE
             )
 
-            # Determine the new deny permissions (always give new denies priority)
+            # Determine the new deny permissions
             if channel.type.name == "GUILD_TEXT":
                 new_deny = existing_deny | deny_perms_text
             elif channel.type.name == "GUILD_VOICE":
                 new_deny = existing_deny | deny_perms_voice
 
             # Keep the 'allow' permissions that do not contradict the new denies
-            new_allow = (
-                existing_allow & ~new_deny
-            )  # Retain 'allow' permissions that do not overlap with 'deny'
+            new_allow = existing_allow & ~new_deny
 
             # Update permissions for @everyone role
             await plugin.app.rest.edit_permission_overwrite(
@@ -212,12 +210,10 @@ async def lockdown(reason):
                 reason="Lockdown.",
             )
 
-            # Send lockdown notification in text channels only
             if channel.type.name == "GUILD_TEXT":
                 message = await plugin.app.rest.create_message(channel.id, embed=embed)
                 lockdown_messages[str(channel.id)] = message.id
 
-    # Add lockdown messages to the backup data
     if "messages" not in backup_data_memory:
         backup_data_memory["messages"] = {}
 
@@ -294,7 +290,7 @@ async def lockdown_command(ctx: lightbulb.SlashContext, reason: str):
 
     await message.edit("Going into lockdown...")
 
-    await lockdown(reason)
+    await lockdown_channels(reason)
 
     await save_backup_to_file()
 
