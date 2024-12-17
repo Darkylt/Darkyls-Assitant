@@ -122,26 +122,18 @@ async def create_backup():
 async def lockdown(reason):
     guild_channels = await plugin.app.rest.fetch_guild_channels(server)
 
-    perms_text = PermissionOverwrite(
-        id=server,
-        type=PermissionOverwriteType.ROLE,
-        deny=(
-            Permissions.SEND_MESSAGES
-            | Permissions.CREATE_PRIVATE_THREADS
-            | Permissions.CREATE_PUBLIC_THREADS
-            | Permissions.ADD_REACTIONS
-        ),
+    deny_perms_text = (
+        Permissions.SEND_MESSAGES
+        | Permissions.CREATE_PRIVATE_THREADS
+        | Permissions.CREATE_PUBLIC_THREADS
+        | Permissions.ADD_REACTIONS
     )
 
-    perms_voice = PermissionOverwrite(
-        id=server,
-        type=PermissionOverwriteType.ROLE,
-        deny=(
-            Permissions.CONNECT
-            | Permissions.SEND_MESSAGES
-            | Permissions.ADD_REACTIONS
-            | Permissions.READ_MESSAGE_HISTORY
-        ),
+    deny_perms_voice = (
+        Permissions.CONNECT
+        | Permissions.SEND_MESSAGES
+        | Permissions.ADD_REACTIONS
+        | Permissions.READ_MESSAGE_HISTORY
     )
 
     embed = hikari.Embed(
@@ -183,10 +175,22 @@ async def lockdown(reason):
 
     for channel in guild_channels:
         if channel.type.name == "GUILD_TEXT":
-            await plugin.app.rest.edit_permission_overwrite(channel.id, perms_text)
+            await plugin.app.rest.edit_permission_overwrite(
+                channel=channel.id,
+                target=server,  # For some reason the role ID for @everyone is the same as the server ID so let's roll with it
+                target_type=hikari.PermissionOverwriteType.ROLE,
+                deny=deny_perms_text,
+                reason="Lockdown.",
+            )
             await plugin.app.rest.create_message(channel.id, embed=embed)
         elif channel.type.name == "GUILD_VOICE":
-            await plugin.app.rest.edit_permission_overwrite(channel.id, perms_voice)
+            await plugin.app.rest.edit_permission_overwrite(
+                channel=channel.id,
+                target=server,
+                target_type=hikari.PermissionOverwriteType.ROLE,
+                deny=deny_perms_voice,
+                reason="Lockdown.",
+            )
 
 
 def load_backup():
