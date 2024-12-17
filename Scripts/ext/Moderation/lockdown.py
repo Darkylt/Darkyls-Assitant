@@ -24,7 +24,7 @@ import hikari
 import lightbulb
 from hikari import Permissions
 
-plugin = lightbulb.Plugin("Report", "Allows users to report members")
+plugin = lightbulb.Plugin("Lockdown", "Lock down the server in case of emergency")
 plugin.add_checks(lightbulb.has_role_permissions(hikari.Permissions.ADMINISTRATOR))
 
 # server = config.Bot.server
