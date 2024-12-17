@@ -22,7 +22,7 @@ import bot_utils as utils
 import config_reader as config
 import hikari
 import lightbulb
-from hikari import PermissionOverwrite, PermissionOverwriteType, Permissions
+from hikari import Permissions
 
 plugin = lightbulb.Plugin("Report", "Allows users to report members")
 plugin.add_checks(lightbulb.has_role_permissions(hikari.Permissions.ADMINISTRATOR))
@@ -293,36 +293,6 @@ async def save_backup_to_file():
         print(f"Failed to save backup file due to permission error: {e}")
     except Exception as e:
         print(f"An unexpected error occurred while saving the backup: {e}")
-
-
-def load_backup():
-    with open(backup_file_path, "r") as file:
-        backup_data = json.load(file)
-
-    reconstructed_data = []
-
-    for channel_data in backup_data:
-        reconstructed_overwrites = {
-            overwrite["id"]: PermissionOverwrite(
-                id=overwrite["id"],
-                type=PermissionOverwriteType[overwrite["type"]],
-                allow=Permissions(overwrite["allow"]),
-                deny=Permissions(overwrite["deny"]),
-            )
-            for overwrite in channel_data["permission_overwrites"]
-        }
-
-        reconstructed_data.append(
-            {
-                "id": channel_data["id"],
-                "name": channel_data["name"],
-                "type": channel_data["type"],
-                "permission_overwrites": reconstructed_overwrites,
-            }
-        )
-
-    print("Backup loaded successfully!")
-    return reconstructed_data
 
 
 @plugin.command
