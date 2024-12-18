@@ -27,8 +27,11 @@ from hikari import Permissions
 plugin = lightbulb.Plugin("Lockdown", "Lock down the server in case of emergency")
 plugin.add_checks(lightbulb.has_role_permissions(hikari.Permissions.ADMINISTRATOR))
 
-# server = config.Bot.server
-server = 1284115021152124948  # DEBUG server
+server = config.Bot.server
+# server = 1284115021152124948  # DEBUG server
+
+# Set the critical roles that should be removed from users
+roles_to_remove = [config.Bot.admin_role, config.Bot.mod_role]
 
 backup_path = os.path.join(config.Paths.data_folder, "Server Backups")
 backup_file_path = os.path.join(backup_path, f"{server}_server_backup.json")
@@ -249,7 +252,7 @@ async def lockdown_channels(reason):
 async def lockdown_members():
     global backup_data_memory
 
-    role_ids = [1313915844102721607]
+    role_ids = roles_to_remove
 
     members = await plugin.app.rest.fetch_members(server)
 

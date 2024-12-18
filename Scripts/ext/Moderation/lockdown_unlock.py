@@ -28,8 +28,8 @@ plugin = lightbulb.Plugin(
 )
 plugin.add_checks(lightbulb.has_role_permissions(hikari.Permissions.ADMINISTRATOR))
 
-# server = config.Bot.server
-server = 1284115021152124948  # DEBUG server
+server = config.Bot.server
+# server = 1284115021152124948  # DEBUG server
 
 backup_path = os.path.join(config.Paths.data_folder, "Server Backups")
 backup_file_path = os.path.join(backup_path, f"{server}_server_backup.json")
