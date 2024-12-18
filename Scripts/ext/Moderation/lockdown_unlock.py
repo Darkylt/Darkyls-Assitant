@@ -210,6 +210,8 @@ async def lockdown_command(ctx: lightbulb.SlashContext):
 
     await clean_up_messages()
 
+    await message.edit("Restoring successful.")
+
 
 def load(bot):
     bot.add_plugin(plugin)
