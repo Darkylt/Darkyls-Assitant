@@ -98,6 +98,7 @@ async def create_backup():
             {
                 "id": channel.id,
                 "name": channel.name,
+                "parent_id": channel.parent_id,
                 "type": channel.type.name,  # Serialize channel type as name
                 "permission_overwrites": serialized_overwrites,
             }
@@ -322,6 +323,8 @@ async def lockdown_command(ctx: lightbulb.SlashContext, reason: str):
     await lockdown_members()
 
     await save_backup_to_file()
+
+    await message.edit("Server locked.")
 
 
 def load(bot):
