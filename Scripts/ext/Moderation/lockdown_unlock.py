@@ -78,16 +78,18 @@ def load_backup():
     return reconstructed_data
 
 
-async def apply_backup_data(reconstructed_data: list):
+async def apply_backup_data_channels(reconstructed_data: list):
+
+    channel_id_map = {
+        channel_data["id"]: channel_data for channel_data in reconstructed_data
+    }
 
     for channel_data in reconstructed_data:
-        # Fetch existing channel if it exists
         try:
             channel = await plugin.app.rest.fetch_channel(channel_data["id"])
         except hikari.NotFoundError:
             channel = None
 
-        # Handle permissions for overwrites
         permission_overwrites = [
             hikari.PermissionOverwrite(
                 id=overwrite.id,
@@ -98,12 +100,19 @@ async def apply_backup_data(reconstructed_data: list):
             for overwrite in channel_data["permission_overwrites"]
         ]
 
+        # Check if parent_id exists and if it's valid
+        category = None
+        if "parent_id" in channel_data:
+            parent_channel_data = channel_id_map.get(channel_data["parent_id"])
+            if parent_channel_data and parent_channel_data["type"] == "GUILD_CATEGORY":
+                category = parent_channel_data["id"]
+
         if channel:
-            # Update existing channel
             await plugin.app.rest.edit_channel(
                 channel.id,
                 name=channel_data["name"],
                 permission_overwrites=permission_overwrites,
+                parent_category=category,
             )
         else:
             # Create channel based on type
@@ -112,12 +121,14 @@ async def apply_backup_data(reconstructed_data: list):
                     server,
                     name=channel_data["name"],
                     permission_overwrites=permission_overwrites,
+                    category=category,
                 )
             elif channel_data["type"] == "GUILD_VOICE":
                 await plugin.app.rest.create_guild_voice_channel(
                     server,
                     name=channel_data["name"],
                     permission_overwrites=permission_overwrites,
+                    category=category,
                 )
             elif channel_data["type"] == "GUILD_CATEGORY":
                 await plugin.app.rest.create_guild_category(
@@ -145,7 +156,7 @@ async def lockdown_command(ctx: lightbulb.SlashContext):
     message = await ctx.respond("Restoring...")
 
     reconstructed_data = load_backup()
-    await apply_backup_data(reconstructed_data)
+    await apply_backup_data_channels(reconstructed_data)
 
 
 def load(bot):
