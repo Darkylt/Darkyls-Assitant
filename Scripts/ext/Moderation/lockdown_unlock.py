@@ -154,7 +154,38 @@ async def apply_backup_data_roles():
                     server, user_id, role_id, reason="Restoring from lockdown."
                 )
             except Exception as e:
-                print(f"Error adding role {role_id} to user {user_id}: {e}")
+                from bot import logger
+
+                logger.error(f"Error adding role {role_id} to user {user_id}: {e}")
+
+
+async def clean_up_messages():
+    try:
+        with open(backup_file_path, "r") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        print(f"Error: The file at {backup_file_path} was not found.")
+        return
+    except json.JSONDecodeError:
+        print("Error: Failed to decode JSON from the backup file.")
+        return
+
+    messages = data.get("messages", {})
+    if not messages:
+        print("No messages found in the backup data.")
+        return
+
+    for channel_id, message_id in messages.items():
+        try:
+            await plugin.app.rest.delete_message(channel_id, message_id)
+        except Exception as e:
+            from bot import logger
+
+            logger.error(
+                f"Error deleting message {message_id} in channel {channel_id}: {e}"
+            )
+
+    print("Message cleanup completed.")
 
 
 @plugin.command
@@ -176,6 +207,8 @@ async def lockdown_command(ctx: lightbulb.SlashContext):
     await apply_backup_data_channels(reconstructed_data)
 
     await apply_backup_data_roles()
+
+    await clean_up_messages()
 
 
 def load(bot):
