@@ -35,7 +35,7 @@ backup_path = os.path.join(config.Paths.data_folder, "Server Backups")
 backup_file_path = os.path.join(backup_path, f"{server}_server_backup.json")
 
 
-def load_backup():
+def load_backup_channels():
     with open(backup_file_path, "r") as file:
         backup_data = json.load(file)
 
@@ -140,6 +140,23 @@ async def apply_backup_data_channels(reconstructed_data: list):
     print("Backup data applied successfully!")
 
 
+async def apply_backup_data_roles():
+    with open(backup_file_path, "r") as file:
+        data = json.load(file)
+
+    # Extract the removed roles data
+    removed_roles = data.get("removed_roles", {})
+
+    for user_id, role_ids in removed_roles.items():
+        for role_id in role_ids:
+            try:
+                await plugin.app.rest.add_role_to_member(
+                    server, user_id, role_id, reason="Restoring from lockdown."
+                )
+            except Exception as e:
+                print(f"Error adding role {role_id} to user {user_id}: {e}")
+
+
 @plugin.command
 @lightbulb.add_cooldown(3, 3, lightbulb.UserBucket)
 @lightbulb.app_command_permissions(hikari.Permissions.ADMINISTRATOR, dm_enabled=False)
@@ -155,8 +172,10 @@ async def lockdown_command(ctx: lightbulb.SlashContext):
 
     message = await ctx.respond("Restoring...")
 
-    reconstructed_data = load_backup()
+    reconstructed_data = load_backup_channels()
     await apply_backup_data_channels(reconstructed_data)
+
+    await apply_backup_data_roles()
 
 
 def load(bot):
