@@ -21,6 +21,7 @@ import bot_utils as utils
 import config_reader as config
 import hikari
 import lightbulb
+import vars
 from hikari import PermissionOverwrite, PermissionOverwriteType, Permissions
 
 plugin = lightbulb.Plugin(
@@ -209,6 +210,8 @@ async def lockdown_command(ctx: lightbulb.SlashContext):
     await apply_backup_data_roles()
 
     await clean_up_messages()
+
+    vars.lockdown = False
 
     await message.edit("Restoring successful.")
 

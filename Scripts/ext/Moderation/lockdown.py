@@ -22,6 +22,7 @@ import bot_utils as utils
 import config_reader as config
 import hikari
 import lightbulb
+import vars
 from hikari import Permissions
 
 plugin = lightbulb.Plugin("Lockdown", "Lock down the server in case of emergency")
@@ -326,6 +327,8 @@ async def lockdown_command(ctx: lightbulb.SlashContext, reason: str):
     await lockdown_members()
 
     await save_backup_to_file()
+
+    vars.lockdown = True
 
     await message.edit("Server locked.")
 
