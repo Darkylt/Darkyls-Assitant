@@ -13,8 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see https://www.gnu.org/licenses/.
 
-raid = False
-captcha_enabled = False
-worm_is_running = False
+raid = False  # If there is a raid happening
+captcha_enabled = False  # If captchas are enabled
+worm_is_running = False  # If a worm simulation is currently running
 
-lockdown = False
+lockdown = False  # If there is a lockdown happening
