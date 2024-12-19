@@ -55,7 +55,7 @@ class VerifyView(miru.View):
 
         await update_captcha_status()
 
-        from vars import captcha_enabled
+        import vars
 
         if any(num == config.Bot.verified_role for num in ctx.member.role_ids):
             await ctx.respond(
@@ -72,7 +72,7 @@ class VerifyView(miru.View):
             )
             return
 
-        if captcha_enabled:
+        if vars.captcha_enabled:
             await ctx.respond(
                 "Extra verification required. The bot will DM you with a captcha",
                 flags=hikari.MessageFlag.EPHEMERAL,

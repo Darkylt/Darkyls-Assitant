@@ -21,7 +21,7 @@ import config_reader as config
 import hikari
 import lightbulb
 import member_managment
-from vars import raid
+import vars
 from Verification.captcha_enabling import update_captcha_status
 
 plugin = lightbulb.Plugin("welcome", "Handles joining")
@@ -42,7 +42,6 @@ async def handle_join(event: hikari.MemberCreateEvent):
     Gets called when a new member joins.
     It runs a helper function used for handling new joins.
     """
-    global raid
 
     try:
         if event.member.is_bot or event.member.is_system:
@@ -59,7 +58,7 @@ async def handle_join(event: hikari.MemberCreateEvent):
 
         # Check for raid condition
         if len(join_times) >= raid_threshold:
-            raid = True
+            vars.raid = True
 
             from bot import Logging
 
@@ -73,11 +72,11 @@ async def handle_join(event: hikari.MemberCreateEvent):
                 f"Raid detected! More than {raid_threshold} members joined within {time_frame} seconds."
             )
         else:
-            raid = False
+            vars.raid = False
 
         await update_captcha_status()
 
-        if not raid:
+        if not vars.raid:
             await member_managment.new_member(event.member, plugin.bot)
 
     except Exception as e:
