@@ -82,7 +82,7 @@ async def extract_urls(content: str) -> list:
     """
     try:
         url_pattern = re.compile(
-            r"https?://[^\s/$.?#].[^\s]*|www\.[^\s/$.?#].[^\s]*|[^\s/$.?#]+\.[^\s/$.?#]+"
+            r"https?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+|www\.[a-zA-Z0-9-]+(?:\.[a-zA-Z]{2,})+"
         )
         matches = url_pattern.findall(content)
 
@@ -98,11 +98,12 @@ async def extract_urls(content: str) -> list:
 
             domain = domain.split(":")[0]
 
-            # Remove subdomains, keeping only the main domain
             domain_parts = domain.split(".")
             if len(domain_parts) > 2:
                 domain = ".".join(domain_parts[-2:])
-            domains.add(domain)
+
+            if len(domain.split(".")) > 1:
+                domains.add(domain)
 
         return list(domains)
 
