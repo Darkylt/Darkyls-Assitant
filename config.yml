@@ -163,7 +163,7 @@ Level System:
 
 Fun:
   69_enabled: True
-  send_explanation_message: True
+  send_explanation_message: False
     
 
 Moderation:
