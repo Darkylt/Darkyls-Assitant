@@ -136,6 +136,11 @@ class YouTube:
     discord_channel = config["YouTube"]["discord_channel"]
 
 
+class Fun:
+    enable_69 = config["Fun"]["69_enabled"]
+    enable_69_message = config["Fun"]["send_explanation_message"]
+
+
 class HelpMessage:
     message = config["Help Messages"]["general"]
     message_all = config["Help Messages"]["all_commands"]

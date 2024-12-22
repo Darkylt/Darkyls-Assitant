@@ -161,6 +161,11 @@ Level System:
     99: 54055
     100: 55100
 
+Fun:
+  69_enabled: True
+  send_explanation_message: True
+    
+
 Moderation:
   #Filtering
   allowed_files:
