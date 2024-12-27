@@ -114,8 +114,8 @@ async def handle_guild_text(event: hikari.MessageCreateEvent, nsfw: bool):
         return message
 
     try:
-        # if event.message.guild_id != config.Bot.server:
-        #    return
+        if event.message.guild_id != config.Bot.server:
+            return
 
         if event.author.is_bot or event.author.is_system:
             return
