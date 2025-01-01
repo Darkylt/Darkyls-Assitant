@@ -37,8 +37,8 @@ class Captcha:
         self.captchas = []
         self.index = captcha_index
 
-    async def generate(self, id):
-        captcha = await self.generator_func(id)
+    async def generate(self, embed, id):
+        captcha = await self.generator_func(embed, id)
         self.captchas.append(captcha)
         self.index += 1
         return captcha

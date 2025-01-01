@@ -36,12 +36,9 @@ ENABLED = True
 
 async def test(ctx: lightbulb.SlashContext):
 
-    modal = buttons.MyModal()
-    builder = modal.build_response(miru.client.Client)
+    view = buttons.Test()
 
-    await builder.create_modal_response(ctx.interaction)
-
-    miru.Client.start_modal(modal)
+    await ctx.respond("This is the test button.", components=view)
 
 
 @plugin.command

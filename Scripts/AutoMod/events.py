@@ -94,10 +94,9 @@ async def handle_dm(event: hikari.MessageCreateEvent):
     if await get_id_from_user(event.author_id):
         return
 
-    # Do some action
-    await event.message.respond(
-        "Heya! There are no DM features yet.\nIf you have an idea for DM interactions, tell it Darkyl!"
-    )
+    # await event.message.respond(
+    #    "Heya! There are no DM features yet.\nIf you have an idea for DM interactions, tell it Darkyl!"
+    # )
 
 
 async def handle_guild_text(event: hikari.MessageCreateEvent, nsfw: bool):

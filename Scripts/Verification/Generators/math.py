@@ -67,8 +67,5 @@ async def generate(embed: hikari.Embed, captcha_id: str) -> Tuple[hikari.Embed, 
 
     problem, solution = await generate_math_problem()
 
-    # Perform whatever code to make the captcha
-    solution = "Whatever the solution is"
-
     embed = await make_embed(embed, problem)
     return embed, str(solution)
