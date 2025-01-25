@@ -175,6 +175,10 @@ class Verification:
     disable_captcha = config["Moderation"]["disable_captcha"]
 
 
+class Dev:
+    key = secret["Secret API secret keying api key secret Secret Key"]
+
+
 class InvalidConfigError(Exception):
     pass
 
