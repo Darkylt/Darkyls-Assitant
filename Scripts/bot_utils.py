@@ -115,12 +115,12 @@ async def validate_command(
 
     from bot import logger
 
-    if not vars.lockdown and not ctx.author.id == config.Bot.owner_id:
-        await ctx.respond(
-            "Server is under lockdown.",
-            flags=hikari.MessageFlag.EPHEMERAL,
-        )
-        return False
+    # if not vars.lockdown and not ctx.author.id == config.Bot.owner_id:
+    #     await ctx.respond(
+    #          "Server is under lockdown.",
+    #         flags=hikari.MessageFlag.EPHEMERAL,
+    #     )
+    #     return False
 
     try:
         # Is command author human?
