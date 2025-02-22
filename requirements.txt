@@ -22,3 +22,4 @@ segno==1.6.1
 qrcode-artistic==3.0.2
 psutil==6.0.0
 Flask==3.0.3
+python-barcode==0.15.1
