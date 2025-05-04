@@ -17,6 +17,7 @@ import datetime
 import json
 import os
 import random
+from collections import defaultdict
 
 import bot_utils as utils
 import config_reader as config
@@ -28,7 +29,9 @@ import member_managment
 import miru
 import miru.text_input
 import miru.view
+import modals
 import vars
+from voice_cache import created_channels, locked_channels, voice_state_cache
 
 
 class ManageViews:
@@ -1157,3 +1160,164 @@ class MyModal(miru.Modal, title="Example Title"):
         await ctx.respond(
             f"Your name: `{self.name.value}`\nYour bio: ```{self.bio.value}```"
         )
+
+
+original_overwrites = defaultdict(dict)
+
+
+class TempVoiceChatView(miru.View):
+    def __init__(self) -> None:
+        super().__init__(timeout=None)
+
+    @miru.button(
+        label="🖊 Rename",
+        style=hikari.ButtonStyle.PRIMARY,
+        custom_id="temp_vc_rename",
+        row=0,
+    )
+    async def rename_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
+        author = ctx.author
+        channel_id = ctx.channel_id
+
+        channel_owner = created_channels.get(channel_id)
+
+        if not channel_owner:
+            embed = utils.EmbedMaker.generate_error_embed(
+                "Unknown Channel", "This is not a TempVoice channel."
+            )
+            await ctx.respond(embed=embed, flags=hikari.MessageFlag.EPHEMERAL)
+            return
+
+        if not author.id == channel_owner:
+            embed = utils.EmbedMaker.generate_error_embed(
+                "No Permissions.", "You don't have permissions to edit this channel."
+            )
+            await ctx.respond(embed=embed, flags=hikari.MessageFlag.EPHEMERAL)
+            return
+
+        await ctx.respond_with_modal(modals.RenameTempVC())
+
+    @miru.button(
+        label="👥 Change User Limit",
+        style=hikari.ButtonStyle.PRIMARY,
+        custom_id="temp_vc_change_user_limit",
+        row=0,
+    )
+    async def change_user_limit_button(
+        self, ctx: miru.ViewContext, button: miru.Button
+    ) -> None:
+        author = ctx.author
+        channel_id = ctx.channel_id
+
+        channel_owner = created_channels.get(channel_id)
+
+        if not channel_owner:
+            embed = utils.EmbedMaker.generate_error_embed(
+                "Unknown Channel", "This is not a TempVoice channel."
+            )
+            await ctx.respond(embed=embed, flags=hikari.MessageFlag.EPHEMERAL)
+            return
+
+        if not author.id == channel_owner:
+            embed = utils.EmbedMaker.generate_error_embed(
+                "No Permissions.", "You don't have permissions to edit this channel."
+            )
+            await ctx.respond(embed=embed, flags=hikari.MessageFlag.EPHEMERAL)
+            return
+
+        await ctx.respond_with_modal(modals.ChangeUserLimitTempVC())
+
+    @miru.button(
+        label="🔒 Toggle Lock",
+        style=hikari.ButtonStyle.DANGER,
+        custom_id="temp_vc_toggle_lock",
+        row=1,
+    )
+    async def toggle_lock_button(
+        self, ctx: miru.ViewContext, button: miru.Button
+    ) -> None:
+        author = ctx.author
+        channel_id = ctx.channel_id
+
+        channel_owner = created_channels.get(channel_id)
+
+        if not channel_owner:
+            embed = utils.EmbedMaker.generate_error_embed(
+                "Unknown Channel", "This is not a TempVoice channel."
+            )
+            await ctx.respond(embed=embed, flags=hikari.MessageFlag.EPHEMERAL)
+            return
+
+        if not author.id == channel_owner:
+            embed = utils.EmbedMaker.generate_error_embed(
+                "No Permissions.", "You don't have permissions to edit this channel."
+            )
+            await ctx.respond(embed=embed, flags=hikari.MessageFlag.EPHEMERAL)
+            return
+
+        action = 0  # Determines whether to lock or unlock. 0 = lock, 1 = unlock
+
+        if channel_id in locked_channels:
+            action = 1
+
+        channel = await ctx.client.rest.fetch_channel(channel_id)
+
+        everyone_role_id = ctx.guild_id  # @everyone role ID is the same as the guild ID
+
+        if action == 0:  # Lock the channel
+            overwrites = channel.permission_overwrites
+
+            # Save the current overwrites for the @everyone role
+            if everyone_role_id in overwrites:
+                original_overwrites[channel_id] = overwrites[everyone_role_id]
+
+            # Define new deny permissions
+            new_deny_perms = (
+                hikari.Permissions.CONNECT
+                | hikari.Permissions.SEND_MESSAGES
+                | hikari.Permissions.READ_MESSAGE_HISTORY
+            )
+
+            # Apply the new deny permissions to the @everyone role
+            await ctx.client.rest.edit_permission_overwrite(
+                channel=channel_id,
+                target=everyone_role_id,
+                target_type=hikari.PermissionOverwriteType.ROLE,
+                deny=new_deny_perms,
+            )
+
+            locked_channels.add(channel_id)
+            await ctx.respond(
+                embed=utils.EmbedMaker.generate_success_embed(
+                    "Channel Locked.",
+                    "The channel was locked. No new users can join.",
+                ),
+                flags=hikari.MessageFlag.EPHEMERAL,
+            )
+
+        else:  # Unlock the channel
+            # Restore the original overwrites for the @everyone role
+            if channel_id in original_overwrites:
+                original = original_overwrites.pop(channel_id)
+                await ctx.client.rest.edit_permission_overwrite(
+                    channel=channel_id,
+                    target=everyone_role_id,
+                    target_type=hikari.PermissionOverwriteType.ROLE,
+                    allow=original.allow,
+                    deny=original.deny,
+                )
+            else:
+                # If no original overwrites were saved, clear the overwrites
+                await ctx.client.rest.delete_permission_overwrite(
+                    channel=channel_id,
+                    target=everyone_role_id,
+                )
+
+            locked_channels.remove(channel_id)
+            await ctx.respond(
+                embed=utils.EmbedMaker.generate_success_embed(
+                    "Channel Unlocked.",
+                    "The channel was unlocked. New users can join again.",
+                ),
+                flags=hikari.MessageFlag.EPHEMERAL,
+            )

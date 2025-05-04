@@ -12,6 +12,9 @@ Channels:
     channel: 1252707595379146875
     approving: 1252707187424235614
   verify: 1233525697499234385
+  TempVoice:
+    category: 1234415720444596245
+    channel: 1368563510904225844
 
 Welcome Card:
   scale_factor: 0.74

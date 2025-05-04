@@ -122,6 +122,8 @@ class Channels:
     confession_channel = config["Channels"]["Confessions"]["channel"]
     confession_approving_channel = config["Channels"]["Confessions"]["approving"]
     verify = config["Channels"]["verify"]
+    temp_voice_category = config["Channels"]["TempVoice"]["category"]
+    temp_voice_channel = config["Channels"]["TempVoice"]["channel"]
 
 
 class YouTube:

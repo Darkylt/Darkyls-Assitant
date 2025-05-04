@@ -985,3 +985,27 @@ class QRCode:
             os.remove(tmp_filepath)
 
         return filepath
+
+
+class EmbedMaker:
+    @staticmethod
+    def generate_error_embed(title: str, content: str = "") -> hikari.Embed:
+        return EmbedMaker.generate_colored_embed(title, content, "#fc0303")
+
+    @staticmethod
+    def generate_success_embed(title: str, content: str = "") -> hikari.Embed:
+        return EmbedMaker.generate_colored_embed(title, content, "#35fc03")
+
+    @staticmethod
+    def generate_info_embed(title: str, content: str = "") -> hikari.Embed:
+        return EmbedMaker.generate_colored_embed(title, content, "#4287f5")
+
+    @staticmethod
+    def generate_colored_embed(title: str, content: str, hex_code: str) -> hikari.Embed:
+        embed = hikari.Embed(
+            title=title,
+            description=content,
+            color=hikari.Color.from_hex_code(hex_code),
+        )
+        embed.set_author(name="Darkyl's Assistant")
+        return embed
